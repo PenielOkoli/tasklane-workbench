@@ -1,0 +1,25 @@
+
+> tasklane-flow@1.0.0 build
+> next build
+
+Γû▓ Next.js 16.4.2 (Turbopack)
+Γ£ô Running next.config.ts took 324ms
+
+  Creating an optimized production build ...
+
+-----
+FATAL: An unexpected Turbopack error occurred. A panic log has been written to C:\Users\DELL\AppData\Local\Packages\openai.codex_2p2nqsd0c76g0\AC\#!sandbox.{ca1a6569-2221-4d31-8462-58f9ae628783}\Temp\next-panic-bd32c42236bb952efcc69837dfdacd44.log.
+
+To help make Turbopack better, report this error by clicking here: https://bugs.nextjs.org/search?category=turbopack-error-report&title=Turbopack%20Error%3A%20failed%20to%20create%20junction%20point%20at%20%22%5C%5C%5C%5C%3F%5C%5CC%3A%5C%5CUsers%5C%5CDELL%5C%5CDocuments%5C%5CChatGPT%5C%5CFlexiSAF%20Internship%20Deliverables%5C%5Ctasklane-workbench%5C%5C.next%5C%5Cnode_modules%5C%5Cpostcss-16ee410f62bb922c%22%20pointing%20to%20%22%5C%5C%5C%5C%3F%5C%5CC%3A%5C%5CUsers%5C%5CDELL%5C%5CDocuments%5C%5CChatGPT%5C%5CFlexiSAF%20Internship%20Deliverables%5C%5Ctasklane-workbench%5C%5Cnode_modules%5C%5Csanitize-html%5C%5Cnode_modules%5C%5Cpostcss%22&body=Turbopack%20version%3A%20%602864b177%60%0ANext.js%20version%3A%20%600.0.0%60%0A%0AError%20message%3A%0A%60%60%60%0Afailed%20to%20create%20junction%20point%20at%20%22%5C%5C%5C%5C%3F%5C%5CC%3A%5C%5CUsers%5C%5CDELL%5C%5CDocuments%5C%5CChatGPT%5C%5CFlexiSAF%20Internship%20Deliverables%5C%5Ctasklane-workbench%5C%5C.next%5C%5Cnode_modules%5C%5Cpostcss-16ee410f62bb922c%22%20pointing%20to%20%22%5C%5C%5C%5C%3F%5C%5CC%3A%5C%5CUsers%5C%5CDELL%5C%5CDocuments%5C%5CChatGPT%5C%5CFlexiSAF%20Internship%20Deliverables%5C%5Ctasklane-workbench%5C%5Cnode_modules%5C%5Csanitize-html%5C%5Cnode_modules%5C%5Cpostcss%22%0A%0ACaused%20by%3A%0A-%20creation%20of%20a%20new%20symbolic%20link%20or%20junction%20point%20failed%3A%20Access%20is%20denied.%20%28os%20error%205%29%0A-%20Access%20is%20denied.%20%28os%20error%205%29%0A%60%60%60&labels=Turbopack,Turbopack%20Panic%20Backtrace
+-----
+
+
+> Build error occurred
+Error [TurbopackInternalError]: failed to create junction point at "\\\\?\\C:\\Users\\DELL\\Documents\\ChatGPT\\FlexiSAF Internship Deliverables\\tasklane-workbench\\.next\\node_modules\\postcss-16ee410f62bb922c" pointing to "\\\\?\\C:\\Users\\DELL\\Documents\\ChatGPT\\FlexiSAF Internship Deliverables\\tasklane-workbench\\node_modules\\sanitize-html\\node_modules\\postcss"
+
+Caused by:
+- creation of a new symbolic link or junction point failed: Access is denied. (os error 5)
+- Access is denied. (os error 5)
+    at ignore-listed frames {
+  location: undefined
+}
