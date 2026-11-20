@@ -1,0 +1,11 @@
+'use client';
+import {useEffect,useState} from 'react';
+import {onCLS,onINP,onLCP,type Metric} from 'web-vitals';
+const readings:Record<string,number>={};
+export function PerformanceMeter({measurement=false}:{measurement?:boolean}){
+ const [enabled,setEnabled]=useState(measurement),[snapshot,setSnapshot]=useState('');
+ useEffect(()=>{const active=measurement;setEnabled(active);if(!active)return;const report=(m:Metric)=>{readings[m.name]=m.value;};onCLS(report,{reportAllChanges:true});onINP(report,{reportAllChanges:true});onLCP(report,{reportAllChanges:true});},[]);
+ function capture(){const resources=performance.getEntriesByType('resource') as PerformanceResourceTiming[];setSnapshot(JSON.stringify({version:'candidate',url:location.href,at:new Date().toISOString(),visibility:document.visibilityState,interactionMetric:"state-update-to-layout-effect-ms",viewport:{width:innerWidth,height:innerHeight},userAgent:navigator.userAgent,vitals:readings,interactions:performance.getEntriesByName('review-update').map(e=>e.duration),domElements:document.querySelectorAll('*').length,historyRows:document.querySelectorAll('[data-review-row]').length,responsePreCount:document.querySelectorAll('[data-response-json]').length,responseTextChars:Array.from(document.querySelectorAll('[data-response-json]')).reduce((n,e)=>n+(e.textContent?.length||0),0),scripts:resources.filter(e=>e.initiatorType==='script').map(e=>({name:e.name.split('/').pop(),encodedBytes:e.encodedBodySize,decodedBytes:e.decodedBodySize,transferBytes:e.transferSize})),note:'Local lab session; INP is provisional for observed interactions, not field p75. Interaction timing ends at the React layout effect, not paint. Rendering fixture excludes model/network generation latency.'},null,2));}
+ if(!enabled)return null;
+ return <section className="perf-meter" aria-label="Performance measurement"><strong>Measurement mode · synthetic history</strong><p>Same 100 saved AI answers in both builds. Nothing is saved to your workspace. Click “Review next sample” five times, then capture.</p><button onClick={capture}>Capture measurements</button><pre id="performance-snapshot" tabIndex={0}>{snapshot||'Measurements appear here after capture.'}</pre></section>;
+}

@@ -1,0 +1,9 @@
+'use client';
+import {useRef,useState} from 'react';
+import {historyPage,type Feedback} from '@/lib/review-history';
+import {DeferredJson} from './deferred-json';
+export function FeedbackHistory({items,onStatus}:{items:Feedback[];onStatus:(id:string,status:string)=>void}){
+ const [page,setPage]=useState(0),heading=useRef<HTMLHeadingElement>(null);const view=historyPage(items,page);
+ function go(next:number){setPage(next);heading.current?.focus({preventScroll:true});}
+ return <section aria-label="AI answer review history"><h3 ref={heading} tabIndex={-1}>Saved answer history</h3><p>Rate an answer in <a href="/knowledge">Knowledge</a>, then return here to review it. All records remain available for export.</p><p role="status">Showing {view.start}–{view.end} of {items.length} saved answers</p>{items.length>10&&<nav className="eval-pagination" aria-label="Review history pages"><button disabled={view.page===0} onClick={()=>go(view.page-1)}>Previous</button><label>History page <select value={view.page} onChange={e=>go(Number(e.target.value))}>{Array.from({length:view.pages},(_,i)=><option key={i} value={i}>{i+1} of {view.pages}</option>)}</select></label><button disabled={view.page===view.pages-1} onClick={()=>go(view.page+1)}>Next</button></nav>}{!items.length&&<div className="eval-empty">No feedback yet.<br/><span>The next useful test can start with a user’s experience.</span></div>}{view.items.map(f=><article data-review-row className="eval-response" key={f.id}><h3>{f.rating} · {f.question}</h3><p>{f.note||'No written comment.'}</p><small>{f.at}</small><DeferredJson value={f.response} label="Response at feedback time"/><label>Review status <select aria-label={`Review status for ${f.question}`} value={f.status} onChange={e=>onStatus(f.id,e.target.value)}><option>New</option><option>Reviewed</option><option>Add to golden tasks</option></select></label></article>)}</section>;
+}

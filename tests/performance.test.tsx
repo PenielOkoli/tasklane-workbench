@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import React from 'react';
+import {renderToStaticMarkup} from 'react-dom/server';
+import {historyPage,updateReviewStatus} from '../src/lib/review-history';
+import {makeReviewHistory} from '../src/lib/performance-fixture';
+import {DeferredJson} from '../src/components/deferred-json';
+test('every saved AI answer remains reachable once across bounded pages',()=>{const items=makeReviewHistory();const seen=[];for(let page=0;page<10;page++){const view=historyPage(items,page);assert.equal(view.items.length,10);seen.push(...view.items.map(v=>v.id));}assert.deepEqual(seen,items.map(v=>v.id));assert.equal(new Set(seen).size,100);});
+test('empty, shrinking, fractional and invalid history pages are bounded',()=>{assert.deepEqual(historyPage([],200),{page:0,pages:1,items:[],start:0,end:0});assert.equal(historyPage([1,2,3],9).page,0);assert.equal(historyPage(makeReviewHistory(),Infinity).page,0);assert.equal(historyPage(makeReviewHistory(),-3).page,0);assert.equal(historyPage(makeReviewHistory(),1.9).page,1);});
+test('reviewing a later page changes only the selected record and preserves full response payloads',()=>{const before=makeReviewHistory(),after=updateReviewStatus(before,'perf-99','Reviewed');assert.equal(after.length,100);assert.equal(after[99].status,'Reviewed');assert.equal(before[99].status,'New');assert.equal(after[99].response,before[99].response);assert.equal(after[0],before[0]);assert.equal(updateReviewStatus(before,'perf-1','invalid'),before);});
+test('closed structured model details do not serialize or mount the payload',()=>{let serialized=0;const payload={toJSON(){serialized++;return '<script>not executed</script>';}};const html=renderToStaticMarkup(<DeferredJson value={payload} label="Response"/>);assert.equal(serialized,0);assert.doesNotMatch(html,/<pre|<script|not executed/);assert.match(html,/<summary>Response/);});
